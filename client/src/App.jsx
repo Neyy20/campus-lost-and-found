@@ -278,7 +278,6 @@ export default function App() {
             onEdit={handleStartEdit}
             onDelete={handleDeleteItem}
             onResolve={handleResolveItem}
-            possibleMatches={findPossibleMatches(selectedItem, items)}
             onSelectMatch={(matchItem) => setSelectedItem(matchItem)}
           />
         )}
