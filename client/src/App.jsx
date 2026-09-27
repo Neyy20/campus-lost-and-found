@@ -227,6 +227,68 @@ export default function App() {
     setCurrentView('details');
   };
 
+  // If not logged in, enforce the Campus Login Gate
+  if (!user) {
+    return (
+      <div>
+        <nav className="navbar">
+          <div className="navbar-brand">
+            <span>🎓</span>
+            <span>Campus Lost & Found</span>
+          </div>
+          <div className="navbar-links">
+            <button
+              className={`nav-btn ${currentView !== 'register' ? 'active' : ''}`}
+              onClick={() => {
+                setAuthError('');
+                setCurrentView('login');
+              }}
+            >
+              Login
+            </button>
+            <button
+              className={`nav-btn primary ${currentView === 'register' ? 'active' : ''}`}
+              onClick={() => {
+                setAuthError('');
+                setCurrentView('register');
+              }}
+            >
+              Register
+            </button>
+          </div>
+        </nav>
+
+        <div className="container">
+          <div className="hero" style={{ marginTop: '20px' }}>
+            <h1>Campus Lost & Found</h1>
+            <p>Official student portal. Please sign in or register to report or recover items.</p>
+          </div>
+
+          {currentView === 'register' ? (
+            <Register
+              onRegister={handleRegister}
+              onSwitchToLogin={() => {
+                setAuthError('');
+                setCurrentView('login');
+              }}
+              error={authError}
+            />
+          ) : (
+            <Login
+              onLogin={handleLogin}
+              onSwitchToRegister={() => {
+                setAuthError('');
+                setCurrentView('register');
+              }}
+              error={authError}
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Once authenticated, render full application
   return (
     <div>
       <Navbar
@@ -294,22 +356,6 @@ export default function App() {
               setEditItem(null);
               setCurrentView('create');
             }}
-          />
-        )}
-
-        {currentView === 'login' && (
-          <Login
-            onLogin={handleLogin}
-            onSwitchToRegister={() => setCurrentView('register')}
-            error={authError}
-          />
-        )}
-
-        {currentView === 'register' && (
-          <Register
-            onRegister={handleRegister}
-            onSwitchToLogin={() => setCurrentView('login')}
-            error={authError}
           />
         )}
       </div>
